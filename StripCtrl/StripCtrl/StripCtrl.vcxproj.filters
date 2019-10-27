@@ -31,19 +31,19 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StripCtrl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="D3dCapture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorMean.cpp">
+    <ClCompile Include="stripctrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColorCalcMonteCarlo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ColorMean.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="GdiCapture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D3dCapture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,47 +54,44 @@
     <ClInclude Include="CaptureStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D3dCapture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorMean.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Settings.h">
+    <ClInclude Include="ColorCalcMonteCarlo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorCalculator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ColorCalcMonteCarlo.h">
+    <ClInclude Include="ColorMean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LedColors.h">
+    <ClInclude Include="D3dCapture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GdiCapture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LedColors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="StripCtrl.h">
+    <QtMoc Include="stripctrl.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="StripCtrl.ui">
+    <QtUic Include="stripctrl.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="StripCtrl.qrc">
+    <QtRcc Include="stripctrl.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="StripCtrl.rc" />
   </ItemGroup>
 </Project>
