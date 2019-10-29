@@ -14,6 +14,7 @@
 #include "ColorWidget.h"
 #include <atomic>
 #include <mutex>
+#include <QSpinBox>
 
 namespace {
     std::atomic<bool> stop(false);
@@ -38,6 +39,10 @@ std::unique_ptr<CaptureStrategy> makeCaptureStrategy(Settings::CaptureEngine cap
 
 void captureFunc(LedColors& colors, const Settings& settings) {
     std::cout << "Capture thread start" << "\n";
+
+    cnt = 0;
+    sum_fps = 0;
+
     auto color_calculator_ = std::make_unique<ColorCalcMonteCarlo>(settings);
     auto capture = makeCaptureStrategy(settings.capture_engine_);
     capture->init();
@@ -142,6 +147,31 @@ StripCtrl::StripCtrl(QWidget *parent)
             uiToSettings();
     });
 
+    connect(ui.color_full, &QRadioButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            uiToSettings();
+            restartCaptureThread();
+        }
+    });
+
+    connect(ui.color_monte_carlo, &QRadioButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            uiToSettings();
+            restartCaptureThread();
+        }
+    });
+
+    connect(ui.monte_carlo_points, &QLineEdit::textChanged, this, [this]() {
+        if (ui.monte_carlo_points->text().toInt() > 0)
+            uiToSettings();
+    });
+
+    connect(ui.color_threads, qOverload<int>(&QSpinBox::valueChanged), this, [this](int value) {
+        uiToSettings();
+        restartCaptureThread();
+    });
+
+
 
     connect(ui.activate_, &QCheckBox::stateChanged, this, [this]() {
         if (ui.activate_->isChecked()) {
@@ -202,6 +232,12 @@ void StripCtrl::settingsToUi() {
 
     ui.hor_segment_height->setText(QString("%1").arg(settings_.horizontal_segment_height_));
     ui.vert_segment_width->setText(QString("%1").arg(settings_.vertical_segment_width_));
+
+    ui.color_full->setChecked(settings_.color_calculation_ == Settings::ColorCalculation::FullSegment);
+    ui.color_monte_carlo->setChecked(settings_.color_calculation_ == Settings::ColorCalculation::MonteCarlo);
+
+    ui.monte_carlo_points->setText(QString("%1").arg(settings_.monte_carlo_points_));
+    ui.color_threads->setValue(settings_.color_threads_);
 }
 
 void StripCtrl::uiToSettings() {
@@ -212,6 +248,11 @@ void StripCtrl::uiToSettings() {
 
     settings_.horizontal_segment_height_ = ui.hor_segment_height->text().toInt();
     settings_.vertical_segment_width_ = ui.vert_segment_width->text().toInt();
+
+    settings_.color_calculation_ = ui.color_full->isChecked() ? Settings::ColorCalculation::FullSegment : Settings::ColorCalculation::MonteCarlo;
+    
+    settings_.monte_carlo_points_ = ui.monte_carlo_points->text().toInt();
+    settings_.color_threads_ = ui.color_threads->value();
 
     settings_.save();
 }
