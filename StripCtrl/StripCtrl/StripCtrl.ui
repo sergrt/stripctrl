@@ -17,21 +17,21 @@
    <widget class="QLabel" name="labelFps">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>370</x>
       <y>110</y>
       <width>47</width>
       <height>13</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>FPS</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="activate_">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>100</y>
+      <x>280</x>
+      <y>120</y>
       <width>70</width>
       <height>17</height>
      </rect>
@@ -123,10 +123,10 @@
    <widget class="QGroupBox" name="previewBox">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>180</y>
-      <width>491</width>
-      <height>141</height>
+      <x>270</x>
+      <y>160</y>
+      <width>351</width>
+      <height>181</height>
      </rect>
     </property>
     <property name="title">
@@ -194,6 +194,90 @@
           <string>100</string>
          </property>
         </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>100</y>
+      <width>211</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Color calculation</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QRadioButton" name="color_full">
+       <property name="text">
+        <string>Full segment</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QRadioButton" name="color_monte_carlo">
+         <property name="text">
+          <string>Monte-carlo</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="monte_carlo_points">
+         <property name="text">
+          <string>100</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>points</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Threads:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="color_threads">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>32</number>
+         </property>
+         <property name="value">
+          <number>4</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>

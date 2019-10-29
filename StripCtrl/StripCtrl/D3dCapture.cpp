@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "D3dCapture.h"
-#include <iostream>
 
 #pragma comment(lib, "d3d9.lib")
-static int BITS_PER_PIXEL = 32;
+
 void D3dCapture::init() {
     d3d_ = Direct3DCreate9(D3D_SDK_VERSION);
 

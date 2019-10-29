@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "GdiCapture.h"
-static int BITS_PER_PIXEL = 32;
 
 GdiCapture::~GdiCapture(void) {
     cleanup();

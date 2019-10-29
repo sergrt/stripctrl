@@ -6,6 +6,10 @@ public:
         D3D,
         Gdi
     };
+    enum class ColorCalculation {
+        FullSegment,
+        MonteCarlo
+    };
 
     Settings();
     ~Settings();
@@ -18,5 +22,9 @@ public:
     int vertical_segment_width_ = 100;
     int horizontal_segment_height_ = 100;
 
+    int monte_carlo_points_ = 128;
+    int color_threads_ = 4;
+
     CaptureEngine capture_engine_;
+    ColorCalculation color_calculation_;
 };
