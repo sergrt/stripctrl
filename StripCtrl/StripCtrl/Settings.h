@@ -10,6 +10,8 @@ public:
     Settings();
     ~Settings();
 
+    void save() const;
+
     int leds_h_ = 16;
     int leds_v_ = 8;
 

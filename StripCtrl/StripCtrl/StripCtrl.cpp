@@ -15,28 +15,31 @@
 #include <atomic>
 #include <mutex>
 
-std::atomic<bool> stop(false);
-std::atomic<bool> preview_active(true);
-long long sum_fps = 0;
-long long cnt = 0;
-std::mutex fps_mutex;
-std::condition_variable fps_cond;
+namespace {
+    std::atomic<bool> stop(false);
+    std::atomic<bool> preview_active(true);
 
-void timestamp() {
-    auto now = std::chrono::system_clock::now();
-    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
-    std::cout << std::ctime(&now_c) << std::endl;
+    int sum_fps = 0;
+    int cnt = 0;
+    const int max_cnt = 256;
+
+    std::mutex fps_mutex;
+    std::condition_variable fps_cond;
+}
+
+std::unique_ptr<CaptureStrategy> makeCaptureStrategy(Settings::CaptureEngine capture_engine) {
+    if (capture_engine == Settings::CaptureEngine::D3D)
+        return std::make_unique<D3dCapture>();
+    else if (capture_engine == Settings::CaptureEngine::Gdi)
+        return std::make_unique<GdiCapture>();
+    else
+        throw std::runtime_error("Unhandled capture strategy");
 }
 
 void captureFunc(LedColors& colors, const Settings& settings) {
-    std::unique_ptr<ColorCalculator> color_calculator_ = std::make_unique<ColorCalcMonteCarlo>(settings);
-    std::unique_ptr<CaptureStrategy> capture;
-    if (settings.capture_engine_ == Settings::CaptureEngine::D3D)
-        capture = std::make_unique<D3dCapture>();
-    else
-        capture = std::make_unique<GdiCapture>();
-    if (!capture)
-        return;
+    std::cout << "Capture thread start" << "\n";
+    auto color_calculator_ = std::make_unique<ColorCalcMonteCarlo>(settings);
+    auto capture = makeCaptureStrategy(settings.capture_engine_);
     capture->init();
     while(!stop) {
         const auto now = std::chrono::system_clock::now();
@@ -47,8 +50,14 @@ void captureFunc(LedColors& colors, const Settings& settings) {
             colors = color_calculator_->calc(capture->data(), capture->screen_size());
 
             auto diff = std::chrono::system_clock::now() - now;
-            sum_fps += std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
-            cnt += 1;
+            if (cnt == max_cnt) {
+                cnt = 1;
+                sum_fps = std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
+            } else {
+                ++cnt;
+                sum_fps += std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
+            }
+
             std::cout << sum_fps / (double)cnt << "\n";
             fps_cond.notify_all();
         }
@@ -60,6 +69,7 @@ void captureFunc(LedColors& colors, const Settings& settings) {
         //std::cout << sum_fps / (double)cnt << "\n";
     }
     capture->cleanup();
+    std::cout << "Capture thread stop" << "\n";
 }
 
 void UiUpdateThread::run() {
@@ -71,21 +81,27 @@ void UiUpdateThread::run() {
         {
             cnt_ = cnt;
             std::unique_lock<std::mutex> lock(fps_mutex);
-            fps_cond.wait(lock, [cnt_]() {return cnt_ != cnt;});
+            fps_cond.wait(lock, [cnt_]() {return cnt_ != cnt || !preview_active;});
 //            std::cout << sum_fps / (double)cnt << "\n";
             emit updateUi();
         }
     }
 }
 
-void StripCtrl::restartCaptureThread() {
+void StripCtrl::startCaptureThread() {
+    stop = false;
+    capture_thread_ = std::thread(captureFunc, std::ref(colors_), std::ref(settings_));
+}
+
+void StripCtrl::stopCaptureThread() {
     stop = true;
     if (capture_thread_.joinable())
         capture_thread_.join();
+}
 
-    stop = false;
-    capture_thread_ = std::thread(captureFunc, std::ref(colors_), std::ref(settings_));
-
+void StripCtrl::restartCaptureThread() {
+    stopCaptureThread();
+    startCaptureThread();
 }
 
 StripCtrl::StripCtrl(QWidget *parent)
@@ -129,21 +145,17 @@ StripCtrl::StripCtrl(QWidget *parent)
 
     connect(ui.activate_, &QCheckBox::stateChanged, this, [this]() {
         if (ui.activate_->isChecked()) {
-            stop = false;
-            capture_thread_ = std::thread(captureFunc, std::ref(colors_), std::ref(settings_));
-            //ui_update_thread_.start();
+            startCaptureThread();
         } else {
-            stop = true;
-            capture_thread_.join();
+            stopCaptureThread();
         }
     });
 
     connect(ui.previewBox, &QGroupBox::clicked, this, [this](bool checked) {
         if (checked) {
-            preview_active = true;
-            ui_update_thread_.start();
+            startPreviewThread();
         } else {
-            preview_active = false;
+            stopPreviewThread();
         }
     });
 
@@ -162,20 +174,23 @@ StripCtrl::StripCtrl(QWidget *parent)
             Qt::ConnectionType::DirectConnection);
 }
 
-StripCtrl::~StripCtrl() {
-    uiToSettings();
+void StripCtrl::startPreviewThread() {
+    preview_active = true;
+    ui_update_thread_.start();
+}
 
+void StripCtrl::stopPreviewThread() {
     using namespace std::chrono_literals;
 
     preview_active = false;
-    ++cnt;
     fps_cond.notify_all();
     while (!ui_update_thread_.isFinished())
         std::this_thread::sleep_for(100ms);
+}
 
-    stop = true;
-    if (capture_thread_.joinable())
-        capture_thread_.join();
+StripCtrl::~StripCtrl() {
+    stopPreviewThread();
+    stopCaptureThread();
 }
 
 void StripCtrl::settingsToUi() {
@@ -197,7 +212,6 @@ void StripCtrl::uiToSettings() {
 
     settings_.horizontal_segment_height_ = ui.hor_segment_height->text().toInt();
     settings_.vertical_segment_width_ = ui.vert_segment_width->text().toInt();
+
+    settings_.save();
 }
-
-
-

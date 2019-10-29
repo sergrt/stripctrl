@@ -43,12 +43,16 @@ Settings::Settings() {
     else if (capture_engine_str == capture_engine_gdi)
         capture_engine_ = CaptureEngine::Gdi;
     else
-        throw(std::runtime_error("Invalid capture engine"));
+        throw std::runtime_error("Invalid capture engine");
 
     settings.endGroup();
 }
 
 Settings::~Settings() {
+    save();
+}
+
+void Settings::save() const {
     QSettings settings(settings_file_name, QSettings::IniFormat);
     settings.beginGroup(IniFile::General);
     settings.setValue(IniFile::General::LedsH, leds_h_);

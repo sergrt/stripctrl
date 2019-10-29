@@ -30,11 +30,15 @@ private:
     void settingsToUi();
     void uiToSettings();
 
+    void startCaptureThread();
+    void stopCaptureThread();
+    void restartCaptureThread();
+    void startPreviewThread();
+    void stopPreviewThread();
+
     std::thread capture_thread_;
     UiUpdateThread ui_update_thread_;
 
     LedColors colors_;
     Settings settings_;
-
-    void restartCaptureThread();
 };
