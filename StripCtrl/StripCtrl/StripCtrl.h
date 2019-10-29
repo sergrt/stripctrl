@@ -23,13 +23,18 @@ class StripCtrl : public QMainWindow {
 
 public:
     StripCtrl(QWidget *parent = Q_NULLPTR);
+    ~StripCtrl();
 
 private:
     Ui::StripCtrlClass ui;
+    void settingsToUi();
+    void uiToSettings();
 
     std::thread capture_thread_;
     UiUpdateThread ui_update_thread_;
 
     LedColors colors_;
     Settings settings_;
+
+    void restartCaptureThread();
 };

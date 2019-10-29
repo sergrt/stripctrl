@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>640</width>
     <height>400</height>
    </rect>
   </property>
@@ -17,8 +17,8 @@
    <widget class="QLabel" name="labelFps">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>60</y>
+      <x>130</x>
+      <y>110</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QCheckBox" name="activate_">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>10</y>
+      <x>40</x>
+      <y>100</y>
       <width>70</width>
       <height>17</height>
      </rect>
@@ -92,7 +92,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit">
+        <widget class="QLineEdit" name="leds_h">
          <property name="text">
           <string>12</string>
          </property>
@@ -110,7 +110,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="leds_v">
          <property name="text">
           <string>6</string>
          </property>
@@ -124,9 +124,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>120</y>
+      <y>180</y>
       <width>491</width>
-      <height>201</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="title">
@@ -148,13 +148,64 @@
      </item>
     </layout>
    </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>10</y>
+      <width>221</width>
+      <height>83</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Segments dimensions</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Horizontal segment height</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="hor_segment_height">
+         <property name="text">
+          <string>100</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Vertical segment width</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="vert_segment_width">
+         <property name="text">
+          <string>100</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>640</width>
      <height>21</height>
     </rect>
    </property>
