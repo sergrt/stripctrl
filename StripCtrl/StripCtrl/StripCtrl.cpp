@@ -153,6 +153,14 @@ StripCtrl::StripCtrl(QWidget *parent)
         }
     });
 
+    connect(ui.color_interleaved, &QRadioButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            uiToSettings();
+            if (!stop_capture)
+                restartCaptureThread();
+        }
+    });
+
     connect(ui.color_monte_carlo, &QRadioButton::toggled, this, [this](bool checked) {
         if (checked) {
             uiToSettings();
@@ -166,28 +174,29 @@ StripCtrl::StripCtrl(QWidget *parent)
             uiToSettings();
     });
 
+    connect(ui.interleaved_lines, &QLineEdit::textChanged, this, [this]() {
+        if (ui.interleaved_lines->text().toInt() > 0)
+            uiToSettings();
+    });
+
     connect(ui.color_threads, qOverload<int>(&QSpinBox::valueChanged), this, [this](int value) {
         uiToSettings();
         if (!stop_capture)
             restartCaptureThread();
     });
 
-
-
     connect(ui.activate_, &QCheckBox::stateChanged, this, [this]() {
-        if (ui.activate_->isChecked()) {
+        if (ui.activate_->isChecked())
             startCaptureThread();
-        } else {
+        else
             stopCaptureThread();
-        }
     });
 
     connect(ui.previewBox, &QGroupBox::clicked, this, [this](bool checked) {
-        if (checked) {
+        if (checked)
             startPreviewThread();
-        } else {
+        else
             stopPreviewThread();
-        }
     });
 
     if (preview_active)
@@ -229,8 +238,10 @@ void StripCtrl::settingsToUi() {
 
     ui.color_full->setChecked(settings_.color_calculation_ == Settings::ColorCalculation::FullSegment);
     ui.color_monte_carlo->setChecked(settings_.color_calculation_ == Settings::ColorCalculation::MonteCarlo);
+    ui.color_interleaved->setChecked(settings_.color_calculation_ == Settings::ColorCalculation::Interleaved);
 
     ui.monte_carlo_points->setText(QString("%1").arg(settings_.monte_carlo_points_));
+    ui.interleaved_lines->setText(QString("%1").arg(settings_.interleaved_lines_));
     ui.color_threads->setValue(settings_.color_threads_);
 }
 
@@ -243,9 +254,14 @@ void StripCtrl::uiToSettings() {
     settings_.horizontal_segment_height_ = ui.hor_segment_height->text().toInt();
     settings_.vertical_segment_width_ = ui.vert_segment_width->text().toInt();
 
-    settings_.color_calculation_ = ui.color_full->isChecked() ? Settings::ColorCalculation::FullSegment : Settings::ColorCalculation::MonteCarlo;
-    
+    settings_.color_calculation_ = Settings::ColorCalculation::FullSegment;
+    if (ui.color_interleaved->isChecked())
+        settings_.color_calculation_ = Settings::ColorCalculation::Interleaved;
+    else if (ui.color_monte_carlo->isChecked())
+        settings_.color_calculation_ = Settings::ColorCalculation::MonteCarlo;
+
     settings_.monte_carlo_points_ = ui.monte_carlo_points->text().toInt();
+    settings_.interleaved_lines_ = ui.interleaved_lines->text().toInt();
     settings_.color_threads_ = ui.color_threads->value();
 
     settings_.save();

@@ -8,7 +8,8 @@ public:
     };
     enum class ColorCalculation {
         FullSegment,
-        MonteCarlo
+        MonteCarlo,
+        Interleaved
     };
 
     Settings();
@@ -23,6 +24,7 @@ public:
     int horizontal_segment_height_ = 100;
 
     int monte_carlo_points_ = 128;
+    int interleaved_lines_ = 2;
     int color_threads_ = 4;
 
     CaptureEngine capture_engine_;

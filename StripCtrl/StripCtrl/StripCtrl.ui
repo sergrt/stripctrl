@@ -210,6 +210,31 @@
       </widget>
      </item>
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QRadioButton" name="color_interleaved">
+         <property name="text">
+          <string>Interleaved every</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="interleaved_lines">
+         <property name="text">
+          <string>2</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>line</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
         <widget class="QRadioButton" name="color_monte_carlo">
@@ -239,7 +264,7 @@
        <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Threads:</string>
+          <string>Threads count:</string>
          </property>
         </widget>
        </item>

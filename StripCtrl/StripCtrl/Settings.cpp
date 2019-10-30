@@ -13,6 +13,7 @@ namespace {
 
     const auto color_calc_full_segment = QString("FullSegment");
     const auto color_calc_monte_carlo = QString("MonteCarlo");
+    const auto color_calc_interleaved = QString("Interleaved");
 }
 
 struct IniFile {
@@ -25,6 +26,7 @@ struct IniFile {
         static const QString CaptureEngine;
         static const QString ColorCalculation;
         static const QString MonteCarloPoints;
+        static const QString InterleavedLines;
         static const QString ColorThreads;
     };
 };
@@ -38,6 +40,7 @@ const QString IniFile::General::HorSegmentHeight = "HorSegmentHeight";
 const QString IniFile::General::CaptureEngine = "CaptureEngine";
 const QString IniFile::General::ColorCalculation = "ColorCalculation";
 const QString IniFile::General::MonteCarloPoints = "MonteCarloPoints";
+const QString IniFile::General::InterleavedLines = "InterleavedLines";
 const QString IniFile::General::ColorThreads = "ColorThreads";
 
 Settings::Settings() {
@@ -60,10 +63,13 @@ Settings::Settings() {
         color_calculation_ = ColorCalculation::FullSegment;
     else if (color_calc_str == color_calc_monte_carlo)
         color_calculation_ = ColorCalculation::MonteCarlo;
+    else if (color_calc_str == color_calc_interleaved)
+        color_calculation_ = ColorCalculation::Interleaved;
     else
         throw std::runtime_error("Invalid color calc strategy");
 
     monte_carlo_points_ = settings.value(IniFile::General::MonteCarloPoints, 128).toInt();
+    interleaved_lines_ = settings.value(IniFile::General::InterleavedLines, 2).toInt();
     color_threads_ = settings.value(IniFile::General::ColorThreads, 4).toInt();
 
     settings.endGroup();
@@ -94,10 +100,13 @@ void Settings::save() const {
         color_calc_str = color_calc_full_segment;
     else if (color_calculation_ == ColorCalculation::MonteCarlo)
         color_calc_str = color_calc_monte_carlo;
+    else if (color_calculation_ == ColorCalculation::Interleaved)
+        color_calc_str = color_calc_interleaved;
 
     settings.setValue(IniFile::General::ColorCalculation, color_calc_str);
 
     settings.setValue(IniFile::General::MonteCarloPoints, monte_carlo_points_);
+    settings.setValue(IniFile::General::InterleavedLines, interleaved_lines_);
     settings.setValue(IniFile::General::ColorThreads, color_threads_);
 
     settings.endGroup();
