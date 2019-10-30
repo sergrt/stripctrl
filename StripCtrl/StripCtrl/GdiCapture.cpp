@@ -49,7 +49,7 @@ void GdiCapture::capture() {
     GetBitmapBits(captureBitmap, data_.size(), data_.data());
 }
 
-QSize GdiCapture::screen_size() const {
+QSize GdiCapture::screenSize() const {
     return QSize(screen_width_, screen_height_);
 }
 

@@ -52,6 +52,7 @@
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <QtInstall>msvc2017_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
+    <QtHeaderSearchPath>$(QtHeaderSearchPath)</QtHeaderSearchPath>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <QtInstall>msvc2017_64</QtInstall>
@@ -73,7 +74,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(QT_DIR)\include;$(SolutionDir)3rdparty\CPTL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\CPTL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -102,10 +103,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ColorCalcMonteCarlo.cpp" />
-    <ClCompile Include="ColorMean.cpp" />
+    <ClCompile Include="CaptureStrategy.cpp" />
+    <ClCompile Include="ColorCalculator.cpp" />
+    <ClCompile Include="ColorPreviewWidget.cpp" />
     <ClCompile Include="D3dCapture.cpp" />
     <ClCompile Include="GdiCapture.cpp" />
+    <ClCompile Include="LedColors.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -116,10 +119,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureStrategy.h" />
-    <ClInclude Include="ColorCalcMonteCarlo.h" />
     <ClInclude Include="ColorCalculator.h" />
-    <ClInclude Include="ColorMean.h" />
-    <ClInclude Include="ColorWidget.h" />
+    <ClInclude Include="ColorPreviewWidget.h" />
     <ClInclude Include="D3dCapture.h" />
     <ClInclude Include="GdiCapture.h" />
     <ClInclude Include="LedColors.h" />

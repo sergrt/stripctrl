@@ -47,7 +47,7 @@ void D3dCapture::reinitialize() {
     cleanup();
     init();
 }
-QSize D3dCapture::screen_size() const {
+QSize D3dCapture::screenSize() const {
     return QSize(screen_width_, screen_height_);
 }
 void D3dCapture::capture() {

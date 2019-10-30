@@ -1,11 +1,13 @@
 #include "stdafx.h"
-#include "ColorCalcMonteCarlo.h"
+#include "ColorCalculator.h"
 #include "Settings.h"
 #include <QColor>
 #include <QRect>
-#include <optional>
 #include <chrono>
-ColorCalcMonteCarlo::ColorCalcMonteCarlo(const Settings& settings)
+#include <future>
+#include <random>
+
+ColorCalculator::ColorCalculator(const Settings& settings)
     : settings_{ settings } {
 
     thread_pool_.resize(settings.color_threads_);
@@ -95,7 +97,7 @@ QColor threadFunc(int id, const std::vector<unsigned char>& data, QRect rect, in
     return QColor::fromRgbF(r*scale, g*scale, b*scale, a*scale).rgba();
 }
 */
-LedColors ColorCalcMonteCarlo::calc(const std::vector<unsigned char>& data, const QSize& screen_size) {
+LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QSize& screen_size) {
     const auto horizontal_segment_width = screen_size.width() / settings_.leds_h_;
 
     std::vector<std::future<QColor>> results_top_strip(settings_.leds_h_);

@@ -6,32 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>400</height>
+    <width>619</width>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>StripCtrl</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="labelFps">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>110</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>FPS</string>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="activate_">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>120</y>
+      <x>30</x>
+      <y>250</y>
       <width>70</width>
       <height>17</height>
      </rect>
@@ -123,21 +110,24 @@
    <widget class="QGroupBox" name="previewBox">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>160</y>
-      <width>351</width>
-      <height>181</height>
+      <x>240</x>
+      <y>110</y>
+      <width>361</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="title">
      <string>Preview</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
     <property name="checkable">
      <bool>true</bool>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="ColorWidget" name="color_widget_" native="true">
+      <widget class="ColorPreviewWidget" name="color_widget_" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -289,19 +279,18 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>619</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ColorWidget</class>
+   <class>ColorPreviewWidget</class>
    <extends>QWidget</extends>
-   <header>ColorWidget.h</header>
+   <header>ColorPreviewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

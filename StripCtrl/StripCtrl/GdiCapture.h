@@ -11,7 +11,7 @@ public:
     void init() override;
     void capture() override;
     void cleanup() override;
-    QSize screen_size() const override;
+    QSize screenSize() const override;
 
 private:
     void reinitialize();

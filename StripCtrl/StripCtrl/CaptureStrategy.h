@@ -1,5 +1,6 @@
 #pragma once
-#include "LedColors.h"
+#include <QSize>
+#include <vector>
 
 class CaptureStrategy {
 public:
@@ -8,11 +9,9 @@ public:
     virtual void capture() = 0;
     virtual void cleanup() {}
 
-    const std::vector<unsigned char>& data() const {
-        return data_;
-    }
+    const std::vector<unsigned char>& data() const;
+    virtual QSize screenSize() const = 0;
 
-    virtual QSize screen_size() const = 0;
 protected:
     std::vector<unsigned char> data_;
 };

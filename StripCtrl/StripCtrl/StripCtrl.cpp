@@ -9,9 +9,9 @@
 #include <iostream>
 #include <iomanip>
 #include <thread>
-#include "ColorCalcMonteCarlo.h"
+#include "ColorCalculator.h"
 #include "Settings.h"
-#include "ColorWidget.h"
+
 #include <atomic>
 #include <mutex>
 #include <QSpinBox>
@@ -43,7 +43,7 @@ void captureFunc(LedColors& colors, const Settings& settings) {
     cnt = 0;
     sum_fps = 0;
 
-    auto color_calculator_ = std::make_unique<ColorCalcMonteCarlo>(settings);
+    auto color_calculator_ = std::make_unique<ColorCalculator>(settings);
     auto capture = makeCaptureStrategy(settings.capture_engine_);
     capture->init();
     while(!stop) {
@@ -52,7 +52,7 @@ void captureFunc(LedColors& colors, const Settings& settings) {
         // Calculate regions
         {
             std::lock_guard<std::mutex> lock(fps_mutex);
-            colors = color_calculator_->calc(capture->data(), capture->screen_size());
+            colors = color_calculator_->calc(capture->data(), capture->screenSize());
 
             auto diff = std::chrono::system_clock::now() - now;
             if (cnt == max_cnt) {
@@ -192,13 +192,8 @@ StripCtrl::StripCtrl(QWidget *parent)
     if (preview_active)
         ui_update_thread_.start();
 
-
-    
-
     connect(&ui_update_thread_, &UiUpdateThread::updateUi, this, [this]() {
-        //ui.labelFps->setText(QString("%1").arg(sum_fps / (double)cnt));
-        this->ui.color_widget_->setColors(std::move(colors_));
-
+        this->ui.color_widget_->setPreviewData(std::move(colors_), sum_fps / (double)cnt);
         //this->update();
             }, //Qt::ConnectionType::BlockingQueuedConnection);//, Qt::ConnectionType::DirectConnection);
             Qt::ConnectionType::DirectConnection);

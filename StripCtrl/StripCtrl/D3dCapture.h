@@ -11,7 +11,7 @@ class D3dCapture : public CaptureStrategy {
 public:
     void init() override;
     void capture() override;
-    QSize screen_size() const override;
+    QSize screenSize() const override;
 
 private:
     void reinitialize();
