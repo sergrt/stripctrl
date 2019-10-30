@@ -1,8 +1,5 @@
 #pragma once
-
 #include "CaptureStrategy.h"
-
-//#include <QSize>
 
 #include <d3d9.h>
 #include <atlbase.h>

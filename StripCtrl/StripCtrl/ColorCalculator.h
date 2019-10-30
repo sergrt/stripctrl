@@ -9,8 +9,8 @@ class ColorCalculator {
 public:
     ColorCalculator(const Settings& settings);
     LedColors calc(const std::vector<unsigned char>& data, const QSize& screen_size);
-private:
 
+private:
     const Settings& settings_;
     ctpl::thread_pool thread_pool_;
 };

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Settings.h"
+
 #include <QString>
 #include <QSettings>
 #include <stdexcept>

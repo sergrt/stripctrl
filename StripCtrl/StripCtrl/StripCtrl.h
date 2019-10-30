@@ -1,11 +1,8 @@
 #pragma once
-
 #include "ui_StripCtrl.h"
-#include "CaptureStrategy.h"
 #include "Settings.h"
 
 #include <QtWidgets/QMainWindow>
-
 #include <thread>
 
 class UiUpdateThread : public QThread {

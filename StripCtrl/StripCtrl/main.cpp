@@ -2,9 +2,7 @@
 #include "StripCtrl.h"
 #include <QtWidgets/QApplication>
 
-
-
-void Console() {
+void showConsole() {
     AllocConsole();
     FILE *pFileCon = NULL;
     pFileCon = freopen("CONOUT$", "w", stdout);
@@ -17,10 +15,8 @@ void Console() {
     //SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS);
 }
 
-int main(int argc, char *argv[])
-{
-
-    Console();
+int main(int argc, char *argv[]) {
+    showConsole();
     QApplication a(argc, argv);
     StripCtrl w;
     w.show();
