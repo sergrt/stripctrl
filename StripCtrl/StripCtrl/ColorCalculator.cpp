@@ -12,7 +12,7 @@ ColorCalculator::ColorCalculator(const Settings& settings)
     thread_pool_.resize(settings.color_threads_);
 }
 
-QColor threadFuncMonteCarlo(int id, const std::vector<unsigned char>& data, QRect rect, int points_count, int screen_width) {
+QColor threadFuncMonteCarlo(int id, const std::vector<unsigned char>& data, const QRect& rect, int points_count, int screen_width) {
     std::mt19937 generator(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<> w_dist(rect.left(), rect.right());
     std::uniform_int_distribution<> h_dist(rect.top(), rect.bottom());
@@ -46,7 +46,7 @@ QColor threadFuncMonteCarlo(int id, const std::vector<unsigned char>& data, QRec
     return QColor::fromRgbF(r*scale, g*scale, b*scale, a*scale);
 }
 
-QColor threadFuncFullSegment(int id, const std::vector<unsigned char>& data, QRect rect, int not_used, int screen_width) {
+QColor threadFuncFullSegment(int id, const std::vector<unsigned char>& data, const QRect& rect, int not_used, int screen_width) {
     unsigned int B_avg = data[0];
     unsigned int G_avg = data[1];
     unsigned int R_avg = data[2];
@@ -74,7 +74,7 @@ QColor threadFuncFullSegment(int id, const std::vector<unsigned char>& data, QRe
     return QColor(R_avg, G_avg, B_avg);
 }
 
-QColor threadFuncInterleaved(int id, const std::vector<unsigned char>& data, QRect rect, int line_use, int screen_width) {
+QColor threadFuncInterleaved(int id, const std::vector<unsigned char>& data, const QRect& rect, int line_use, int screen_width) {
     unsigned int B_avg = data[0];
     unsigned int G_avg = data[1];
     unsigned int R_avg = data[2];
@@ -108,7 +108,7 @@ QColor threadFuncInterleaved(int id, const std::vector<unsigned char>& data, QRe
 }
 
 /*
-QColor threadFuncFullSegment_dbl(int id, const std::vector<unsigned char>& data, QRect rect, int points_count, int screen_width) {
+QColor threadFuncFullSegment_dbl(int id, const std::vector<unsigned char>& data, const QRect& rect, int points_count, int screen_width) {
     double r = 0.0;
     double g = 0.0;
     double b = 0.0;
@@ -159,8 +159,8 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
     std::vector<std::future<QColor>> results_left_strip(settings_.leds_v_);
     std::vector<std::future<QColor>> results_right_strip(settings_.leds_v_);
 
-    for (int vert = 0; vert < settings_.leds_v_; ++vert) {
-        const auto y = vert * vertical_segment_height;
+    for (size_t vert = 0; vert < settings_.leds_v_; ++vert) {
+        const int y = vert * vertical_segment_height;
         results_left_strip[vert] = thread_pool_.push(thread_func, std::cref(data),
                                                      QRect(0, y, settings_.vertical_segment_width_, vertical_segment_height),
                                                      thread_func_param,
@@ -177,8 +177,8 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
     std::vector<std::future<QColor>> results_top_strip(settings_.leds_h_);
     std::vector<std::future<QColor>> results_bottom_strip(settings_.leds_h_);
 
-    for (int hor = 0; hor < settings_.leds_h_; ++hor) {
-        const auto x = hor * horizontal_segment_width;
+    for (size_t hor = 0; hor < settings_.leds_h_; ++hor) {
+        const int x = hor * horizontal_segment_width;
         results_top_strip[hor] = thread_pool_.push(thread_func, std::cref(data),
                                                    QRect(x, 0, horizontal_segment_width, settings_.horizontal_segment_height_),
                                                    thread_func_param,
@@ -192,12 +192,12 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
     }
 
     LedColors led_colors(settings_.leds_h_, settings_.leds_v_);
-    for (int i = 0; i < settings_.leds_v_; ++i) {
+    for (size_t i = 0; i < settings_.leds_v_; ++i) {
         led_colors.left_strip[i] = results_left_strip[i].get();
         led_colors.right_strip[i] = results_right_strip[i].get();
     }
 
-    for (int i = 0; i < settings_.leds_h_; ++i) {
+    for (size_t i = 0; i < settings_.leds_h_; ++i) {
         led_colors.top_strip[i] = results_top_strip[i].get();
         led_colors.bottom_strip[i] = results_bottom_strip[i].get();
     }

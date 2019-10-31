@@ -41,12 +41,11 @@ void ColorPreviewWidget::paintEvent(QPaintEvent* event) {
     resizeToSegmentsSize(segments_size);
 
     QPainter painter(this);
-    const HorSegmentSize& hor_segment_size = segments_size.first;
 
+    const HorSegmentSize& hor_segment_size = segments_size.first;
     const auto h = height();
     QBrush brush(Qt::SolidPattern);
-
-    for (int i = 0; i < colors_.top_strip.size(); ++i) {
+    for (size_t i = 0; i < colors_.top_strip.size(); ++i) {
         const auto x = i * hor_segment_size.width();
 
         brush.setColor(colors_.top_strip[i]);
@@ -58,7 +57,7 @@ void ColorPreviewWidget::paintEvent(QPaintEvent* event) {
 
     const VertSegmentSize& vert_segment_size = segments_size.second;
     const auto w = width();
-    for (int i = 0; i < colors_.left_strip.size(); ++i) {
+    for (size_t i = 0; i < colors_.left_strip.size(); ++i) {
         const auto y = hor_segment_size.height() + i * vert_segment_size.height();
 
         brush.setColor(colors_.left_strip[i]);

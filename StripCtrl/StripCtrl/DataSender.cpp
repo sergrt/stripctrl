@@ -21,7 +21,7 @@ void DataSender::send(const LedColors& data) {
 
     unsigned char led_num = data.left_strip.size() * 2 + data.top_strip.size() * 2;
     std::vector<char> raw_data(1 + led_num * 3);
-    int idx = 0;
+    size_t idx = 0;
     raw_data[idx++] = led_num;
 
     for (const auto& v : { data.left_strip, data.top_strip, data.right_strip, data.bottom_strip }) {
