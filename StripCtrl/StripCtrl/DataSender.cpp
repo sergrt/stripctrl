@@ -20,10 +20,10 @@ void DataSender::send(const LedColors& data) {
         return;
 
     const unsigned short led_num = data.left_strip.size() * 2 + data.top_strip.size() * 2;
-    std::vector<char> raw_data(sizeof(led_num) + led_num * 3);
+    std::vector<char> raw_data(2 + led_num * 3);
     size_t idx = 0;
-    for (int i = 0; i < sizeof(led_num); ++i)
-        raw_data[idx++] = *(reinterpret_cast<const char*>(&led_num) + i);
+    raw_data[idx++] = *(reinterpret_cast<const char*>(&led_num));
+    raw_data[idx++] = *(reinterpret_cast<const char*>(&led_num) + 1);
 
     for (const auto& v : { data.left_strip, data.top_strip, data.right_strip, data.bottom_strip }) {
         for (const auto& c : v) {
