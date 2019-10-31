@@ -71,12 +71,13 @@ void captureFunc(LedColors& colors, const Settings& settings) {
                 sum_fps += std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
             }
 
-            std::cout << sum_fps / (double)cnt << "\n";
+            std::cout << sum_fps / static_cast<double>(cnt) << "\n";
             fps_cond.notify_all();
         }
 
         // Send colors to strip here
-        // --> data_sender.send(colors);
+        // -->
+        data_sender.send(colors);
     }
     capture->cleanup();
     std::cout << "Capture thread stop" << "\n";
@@ -113,7 +114,10 @@ void StripCtrl::restartCaptureThread() {
 StripCtrl::StripCtrl(QWidget *parent)
     : QMainWindow(parent) {
     ui.setupUi(this);
-    const auto available_ports = QSerialPortInfo::availablePorts();
+    auto available_ports = QSerialPortInfo::availablePorts();
+    std::sort(std::begin(available_ports), std::end(available_ports), [](const QSerialPortInfo& lhs, const QSerialPortInfo& rhs) {
+        return lhs.portName() < rhs.portName();
+    });
     for (const auto& info : available_ports)
         ui.serial_port_name->addItem(info.portName(), info.portName());
 
@@ -261,7 +265,7 @@ StripCtrl::~StripCtrl() {
     stopCaptureThread();
 }
 
-void StripCtrl::settingsToUi() {
+void StripCtrl::settingsToUi() const {
     ui.capture_d3d->setChecked(settings_.capture_engine_ == Settings::CaptureEngine::D3D);
     ui.capture_gdi->setChecked(settings_.capture_engine_ == Settings::CaptureEngine::Gdi);
 

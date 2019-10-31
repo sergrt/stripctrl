@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GdiCapture.h"
 
-GdiCapture::~GdiCapture(void) {
+GdiCapture::~GdiCapture() {
     cleanup();
 }
 

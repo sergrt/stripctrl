@@ -19,10 +19,11 @@ void DataSender::send(const LedColors& data) {
     if (!serial_port_.isOpen())
         return;
 
-    unsigned char led_num = data.left_strip.size() * 2 + data.top_strip.size() * 2;
-    std::vector<char> raw_data(1 + led_num * 3);
+    const unsigned short led_num = data.left_strip.size() * 2 + data.top_strip.size() * 2;
+    std::vector<char> raw_data(sizeof(led_num) + led_num * 3);
     size_t idx = 0;
-    raw_data[idx++] = led_num;
+    for (int i = 0; i < sizeof(led_num); ++i)
+        raw_data[idx++] = *(reinterpret_cast<const char*>(&led_num) + i);
 
     for (const auto& v : { data.left_strip, data.top_strip, data.right_strip, data.bottom_strip }) {
         for (const auto& c : v) {

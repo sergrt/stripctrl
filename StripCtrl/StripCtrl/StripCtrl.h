@@ -24,7 +24,7 @@ public:
 
 private:
     Ui::StripCtrlClass ui;
-    void settingsToUi();
+    void settingsToUi() const;
 
     void startCaptureThread();
     void stopCaptureThread();
