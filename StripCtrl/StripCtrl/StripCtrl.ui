@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>619</width>
-    <height>336</height>
+    <width>757</width>
+    <height>277</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QCheckBox" name="activate_">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>250</y>
+      <x>20</x>
+      <y>240</y>
       <width>101</width>
       <height>17</height>
      </rect>
@@ -32,7 +32,7 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>161</width>
+      <width>141</width>
       <height>81</height>
      </rect>
     </property>
@@ -59,7 +59,7 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>170</x>
       <y>10</y>
       <width>161</width>
       <height>83</height>
@@ -110,10 +110,10 @@
    <widget class="QGroupBox" name="previewBox">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>110</y>
-      <width>361</width>
-      <height>191</height>
+      <x>410</x>
+      <y>100</y>
+      <width>331</width>
+      <height>161</height>
      </rect>
     </property>
     <property name="title">
@@ -127,7 +127,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="ColorPreviewWidget" name="color_widget_" native="true">
+      <widget class="ColorPreviewWidget" name="color_widget" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -141,7 +141,7 @@
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>340</x>
       <y>10</y>
       <width>221</width>
       <height>83</height>
@@ -194,7 +194,7 @@
      <rect>
       <x>20</x>
       <y>100</y>
-      <width>211</width>
+      <width>231</width>
       <height>131</height>
      </rect>
     </property>
@@ -298,16 +298,133 @@
      </item>
     </layout>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>619</width>
-     <height>21</height>
-    </rect>
-   </property>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>10</y>
+      <width>171</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Serial port</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Port</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="serial_port_name"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <item>
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Baud rate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="baud_rate"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="use_gamma_correction">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>100</y>
+      <width>141</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Gamma control</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_6">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_11">
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Red</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="gamma_red">
+         <property name="minimum">
+          <number>-50</number>
+         </property>
+         <property name="maximum">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <item>
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Green</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="gamma_green">
+         <property name="minimum">
+          <number>-50</number>
+         </property>
+         <property name="maximum">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_13">
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Blue</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="gamma_blue">
+         <property name="minimum">
+          <number>-50</number>
+         </property>
+         <property name="maximum">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

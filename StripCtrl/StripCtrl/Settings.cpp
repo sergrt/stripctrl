@@ -28,6 +28,12 @@ struct IniFile {
         static const QString MonteCarloPoints;
         static const QString InterleavedLines;
         static const QString ColorThreads;
+        static const QString SerialPortName;
+        static const QString BaudRate;
+        static const QString UseGammaCorrection;
+        static const QString GammaRed;
+        static const QString GammaGreen;
+        static const QString GammaBlue;
     };
 };
 
@@ -42,6 +48,12 @@ const QString IniFile::General::ColorCalculation = "ColorCalculation";
 const QString IniFile::General::MonteCarloPoints = "MonteCarloPoints";
 const QString IniFile::General::InterleavedLines = "InterleavedLines";
 const QString IniFile::General::ColorThreads = "ColorThreads";
+const QString IniFile::General::SerialPortName = "SerialPortName";
+const QString IniFile::General::BaudRate = "BaudRate";
+const QString IniFile::General::UseGammaCorrection = "UseGammaCorrection";
+const QString IniFile::General::GammaRed = "GammaRed";
+const QString IniFile::General::GammaGreen = "GammaGreen";
+const QString IniFile::General::GammaBlue = "GammaBlue";
 
 Settings::Settings() {
     QSettings settings(settings_file_name, QSettings::IniFormat);
@@ -71,6 +83,14 @@ Settings::Settings() {
     monte_carlo_points_ = settings.value(IniFile::General::MonteCarloPoints, 128).toInt();
     interleaved_lines_ = settings.value(IniFile::General::InterleavedLines, 2).toInt();
     color_threads_ = settings.value(IniFile::General::ColorThreads, 4).toInt();
+
+    serial_port_name_ = settings.value(IniFile::General::SerialPortName, "").toString();
+    baud_rate_ = static_cast<QSerialPort::BaudRate>(settings.value(IniFile::General::BaudRate, QSerialPort::BaudRate::Baud115200).toInt());
+
+    use_gamma_correction_ = settings.value(IniFile::General::UseGammaCorrection, false).toBool();
+    gamma_red_ = settings.value(IniFile::General::GammaRed, 0).toInt();
+    gamma_green_ = settings.value(IniFile::General::GammaGreen, 0).toInt();
+    gamma_blue_ = settings.value(IniFile::General::GammaBlue, 0).toInt();
 
     settings.endGroup();
 }
@@ -108,6 +128,14 @@ void Settings::save() const {
     settings.setValue(IniFile::General::MonteCarloPoints, monte_carlo_points_);
     settings.setValue(IniFile::General::InterleavedLines, interleaved_lines_);
     settings.setValue(IniFile::General::ColorThreads, color_threads_);
+
+    settings.setValue(IniFile::General::SerialPortName, serial_port_name_);
+    settings.setValue(IniFile::General::BaudRate, static_cast<int>(baud_rate_));
+
+    settings.setValue(IniFile::General::UseGammaCorrection, use_gamma_correction_);
+    settings.setValue(IniFile::General::GammaRed, gamma_red_);
+    settings.setValue(IniFile::General::GammaGreen, gamma_green_);
+    settings.setValue(IniFile::General::GammaBlue, gamma_blue_);
 
     settings.endGroup();
 }

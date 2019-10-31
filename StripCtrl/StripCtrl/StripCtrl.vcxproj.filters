@@ -55,6 +55,9 @@
     <ClCompile Include="LedColors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataSender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -79,6 +82,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorPreviewWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

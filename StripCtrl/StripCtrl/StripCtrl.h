@@ -25,7 +25,6 @@ public:
 private:
     Ui::StripCtrlClass ui;
     void settingsToUi();
-    void uiToSettings();
 
     void startCaptureThread();
     void stopCaptureThread();
@@ -38,4 +37,7 @@ private:
 
     LedColors colors_;
     Settings settings_;
+
+private slots:
+    void uiToSettings();
 };

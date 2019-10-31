@@ -51,12 +51,12 @@
   </ImportGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <QtInstall>msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;serialport;widgets</QtModules>
     <QtHeaderSearchPath>$(QtHeaderSearchPath)</QtHeaderSearchPath>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <QtInstall>msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;serialport;widgets</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -107,6 +107,7 @@
     <ClCompile Include="ColorCalculator.cpp" />
     <ClCompile Include="ColorPreviewWidget.cpp" />
     <ClCompile Include="D3dCapture.cpp" />
+    <ClCompile Include="DataSender.cpp" />
     <ClCompile Include="GdiCapture.cpp" />
     <ClCompile Include="LedColors.cpp" />
     <ClCompile Include="main.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="ColorCalculator.h" />
     <ClInclude Include="ColorPreviewWidget.h" />
     <ClInclude Include="D3dCapture.h" />
+    <ClInclude Include="DataSender.h" />
     <ClInclude Include="GdiCapture.h" />
     <ClInclude Include="LedColors.h" />
     <ClInclude Include="Settings.h" />

@@ -202,5 +202,19 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
         led_colors.bottom_strip[i] = results_bottom_strip[i].get();
     }
 
+    applyGamma(led_colors);
     return led_colors;
+}
+
+void ColorCalculator::applyGamma(LedColors& led_colors) {
+    if (!settings_.use_gamma_correction_ || (settings_.gamma_red_ == 0 && settings_.gamma_green_ == 0 && settings_.gamma_blue_ == 0))
+        return;
+
+    for (auto v : std::vector<std::vector<QColor>*>{ &led_colors.left_strip, &led_colors.top_strip, &led_colors.right_strip, &led_colors.bottom_strip }) {
+        for (auto& c : *v) {
+            c.setRed(c.red() + settings_.gamma_red_);
+            c.setGreen(c.green() + settings_.gamma_green_);
+            c.setBlue(c.blue() + settings_.gamma_blue_);
+        }
+    }
 }

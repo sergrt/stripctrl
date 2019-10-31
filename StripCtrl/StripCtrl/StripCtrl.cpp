@@ -5,16 +5,17 @@
 #include "D3dCapture.h"
 #include "GdiCapture.h"
 #include <chrono>
-#include <ctime>
 #include <iostream>
 #include <iomanip>
 #include <thread>
 #include "ColorCalculator.h"
 #include "Settings.h"
+#include "DataSender.h"
 
 #include <atomic>
 #include <mutex>
 #include <QSpinBox>
+#include <QSerialPortInfo>
 
 namespace {
     std::atomic<bool> stop_capture(true);
@@ -47,6 +48,7 @@ void captureFunc(LedColors& colors, const Settings& settings) {
     initFps();
 
     ColorCalculator color_calculator(settings);
+    DataSender data_sender(settings);
     auto capture = makeCaptureStrategy(settings.capture_engine_);
     capture->init();
     while(!stop_capture) {
@@ -56,6 +58,8 @@ void captureFunc(LedColors& colors, const Settings& settings) {
         {
             std::lock_guard<std::mutex> lock(fps_mutex);
             colors = color_calculator.calc(capture->data(), capture->screenSize());
+
+            // apply gamma
 
             auto diff = std::chrono::system_clock::now() - now;
             if (cnt == max_cnt) {
@@ -71,6 +75,7 @@ void captureFunc(LedColors& colors, const Settings& settings) {
         }
 
         // Send colors to strip here
+        // --> data_sender.send(colors);
     }
     capture->cleanup();
     std::cout << "Capture thread stop" << "\n";
@@ -107,6 +112,14 @@ void StripCtrl::restartCaptureThread() {
 StripCtrl::StripCtrl(QWidget *parent)
     : QMainWindow(parent) {
     ui.setupUi(this);
+    const auto available_ports = QSerialPortInfo::availablePorts();
+    for (const auto& info : available_ports)
+        ui.serial_port_name->addItem(info.portName(), info.portName());
+
+    ui.baud_rate->addItem("9600", QVariant(static_cast<int>(QSerialPort::BaudRate::Baud9600)));
+    ui.baud_rate->addItem("57600", QVariant(static_cast<int>(QSerialPort::BaudRate::Baud57600)));
+    ui.baud_rate->addItem("115200", QVariant(static_cast<int>(QSerialPort::BaudRate::Baud115200)));
+
     settingsToUi();
 
     connect(ui.capture_d3d, &QRadioButton::toggled, this, [this](bool checked) {
@@ -199,11 +212,28 @@ StripCtrl::StripCtrl(QWidget *parent)
             stopPreviewThread();
     });
 
+    connect(ui.serial_port_name, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        uiToSettings();
+        if (!stop_capture)
+            restartCaptureThread();
+    });
+
+    connect(ui.baud_rate, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        uiToSettings();
+        if (!stop_capture)
+            restartCaptureThread();
+    });
+
+    connect(ui.use_gamma_correction, &QGroupBox::clicked, this, &StripCtrl::uiToSettings);
+    connect(ui.gamma_red, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
+    connect(ui.gamma_green, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
+    connect(ui.gamma_blue, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
+
     if (preview_active)
         ui_update_thread_.start();
 
     connect(&ui_update_thread_, &UiUpdateThread::updateUi, this, [this]() {
-        this->ui.color_widget_->setPreviewData(std::move(colors_), sum_fps / static_cast<double>(cnt));
+        this->ui.color_widget->setPreviewData(colors_, sum_fps / static_cast<double>(cnt));
     }, Qt::ConnectionType::DirectConnection);
 }
 
@@ -243,6 +273,17 @@ void StripCtrl::settingsToUi() {
     ui.monte_carlo_points->setText(QString("%1").arg(settings_.monte_carlo_points_));
     ui.interleaved_lines->setText(QString("%1").arg(settings_.interleaved_lines_));
     ui.color_threads->setValue(settings_.color_threads_);
+
+    const auto port_index = ui.serial_port_name->findData(settings_.serial_port_name_);
+    ui.serial_port_name->setCurrentIndex(port_index);
+
+    const auto baud_rate_index = ui.baud_rate->findData(static_cast<int>(settings_.baud_rate_));
+    ui.baud_rate->setCurrentIndex(baud_rate_index);
+
+    ui.use_gamma_correction->setChecked(settings_.use_gamma_correction_);
+    ui.gamma_red->setValue(settings_.gamma_red_);
+    ui.gamma_green->setValue(settings_.gamma_green_);
+    ui.gamma_blue->setValue(settings_.gamma_blue_);
 }
 
 void StripCtrl::uiToSettings() {
@@ -263,6 +304,14 @@ void StripCtrl::uiToSettings() {
     settings_.monte_carlo_points_ = ui.monte_carlo_points->text().toInt();
     settings_.interleaved_lines_ = ui.interleaved_lines->text().toInt();
     settings_.color_threads_ = ui.color_threads->value();
+
+    settings_.serial_port_name_ = ui.serial_port_name->currentData().toString();
+    settings_.baud_rate_ = static_cast<QSerialPort::BaudRate>(ui.baud_rate->currentData().toInt());
+
+    settings_.use_gamma_correction_ = ui.use_gamma_correction->isChecked();
+    settings_.gamma_red_ = ui.gamma_red->value();
+    settings_.gamma_green_ = ui.gamma_green->value();
+    settings_.gamma_blue_ = ui.gamma_blue->value();
 
     settings_.save();
 }

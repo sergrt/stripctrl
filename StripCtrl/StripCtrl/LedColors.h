@@ -5,6 +5,7 @@
 struct LedColors {
     LedColors() = default;
     LedColors(int w, int h);
+    LedColors(LedColors& other) = default;
     LedColors(LedColors&& other) noexcept;
     LedColors& operator=(LedColors&& other) noexcept;
     bool empty() const;
