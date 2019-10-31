@@ -206,7 +206,7 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
     return led_colors;
 }
 
-void ColorCalculator::applyGamma(LedColors& led_colors) {
+void ColorCalculator::applyGamma(LedColors& led_colors) const {
     if (!settings_.use_gamma_correction_ || (settings_.gamma_red_ == 0 && settings_.gamma_green_ == 0 && settings_.gamma_blue_ == 0))
         return;
 

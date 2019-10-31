@@ -24,8 +24,11 @@ ColorPreviewWidget::SegmentsSize ColorPreviewWidget::calcSegmentsSize() const {
 }
 
 void ColorPreviewWidget::resizeToSegmentsSize(const SegmentsSize& segments_size) {
-    setFixedSize(segments_size.first.width() * colors_.top_strip.size(),
-                 segments_size.first.height() * 2 + segments_size.second.height() * colors_.left_strip.size());
+    const auto hor_margin = (width() - segments_size.first.width() * colors_.top_strip.size()) / 2;
+    const auto vert_margin = (segments_size.first.height() * 2 + segments_size.second.height() * colors_.left_strip.size()) / 2;
+    const QMargins margins(hor_margin, vert_margin, hor_margin, vert_margin);
+
+    setContentsMargins(margins);
 }
 
 void ColorPreviewWidget::paintEvent(QPaintEvent* event) {
