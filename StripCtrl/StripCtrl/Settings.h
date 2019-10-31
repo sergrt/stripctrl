@@ -38,4 +38,8 @@ public:
     int gamma_red_ = 0;
     int gamma_green_ = 0;
     int gamma_blue_ = 0;
+
+    bool use_limits_ = false;
+    int threshold_ = 0;
+    int limit_ = 255;
 };

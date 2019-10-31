@@ -11,6 +11,7 @@ public:
     LedColors calc(const std::vector<unsigned char>& data, const QSize& screen_size);
 
 private:
+    void applyLimits(LedColors& led_colors) const;
     void applyGamma(LedColors& led_colors) const;
     const Settings& settings_;
     ctpl::thread_pool thread_pool_;

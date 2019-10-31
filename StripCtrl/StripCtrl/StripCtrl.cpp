@@ -1,21 +1,22 @@
 #include "stdafx.h"
 #include "StripCtrl.h"
 #include "CaptureStrategy.h"
-#include <memory>
 #include "D3dCapture.h"
 #include "GdiCapture.h"
-#include <chrono>
-#include <iostream>
-#include <iomanip>
-#include <thread>
 #include "ColorCalculator.h"
 #include "Settings.h"
 #include "DataSender.h"
 
-#include <atomic>
-#include <mutex>
 #include <QSpinBox>
 #include <QSerialPortInfo>
+
+#include <memory>
+#include <chrono>
+#include <iostream>
+#include <iomanip>
+#include <thread>
+#include <atomic>
+#include <mutex>
 
 namespace {
     std::atomic<bool> stop_capture(true);
@@ -229,6 +230,10 @@ StripCtrl::StripCtrl(QWidget *parent)
     connect(ui.gamma_green, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
     connect(ui.gamma_blue, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
 
+    connect(ui.use_limits, &QGroupBox::clicked, this, &StripCtrl::uiToSettings);
+    connect(ui.threshold, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
+    connect(ui.limit, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
+
     if (preview_active)
         ui_update_thread_.start();
 
@@ -284,6 +289,10 @@ void StripCtrl::settingsToUi() {
     ui.gamma_red->setValue(settings_.gamma_red_);
     ui.gamma_green->setValue(settings_.gamma_green_);
     ui.gamma_blue->setValue(settings_.gamma_blue_);
+
+    ui.use_limits->setChecked(settings_.use_limits_);
+    ui.threshold->setValue(settings_.threshold_);
+    ui.limit->setValue(settings_.limit_);
 }
 
 void StripCtrl::uiToSettings() {
@@ -312,6 +321,10 @@ void StripCtrl::uiToSettings() {
     settings_.gamma_red_ = ui.gamma_red->value();
     settings_.gamma_green_ = ui.gamma_green->value();
     settings_.gamma_blue_ = ui.gamma_blue->value();
+
+    settings_.use_limits_ = ui.use_limits->isChecked();
+    settings_.threshold_ = ui.threshold->value();
+    settings_.limit_ = ui.limit->value();
 
     settings_.save();
 }

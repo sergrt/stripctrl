@@ -202,14 +202,35 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
         led_colors.bottom_strip[i] = results_bottom_strip[i].get();
     }
 
-    applyGamma(led_colors);
+    if (settings_.use_limits_ && !(settings_.threshold_ == 0 && settings_.limit_ == 255))
+        applyLimits(led_colors);
+
+    if (settings_.use_gamma_correction_ && !(settings_.gamma_red_ == 0 && settings_.gamma_green_ == 0 && settings_.gamma_blue_ == 0))
+        applyGamma(led_colors);
+
+
     return led_colors;
 }
 
-void ColorCalculator::applyGamma(LedColors& led_colors) const {
-    if (!settings_.use_gamma_correction_ || (settings_.gamma_red_ == 0 && settings_.gamma_green_ == 0 && settings_.gamma_blue_ == 0))
-        return;
+void ColorCalculator::applyLimits(LedColors& led_colors) const {
+    for (auto v : std::vector<std::vector<QColor>*>{ &led_colors.left_strip, &led_colors.top_strip, &led_colors.right_strip, &led_colors.bottom_strip }) {
+        for (auto& c : *v) {
+            const auto m = (c.red() + c.green() + c.blue()) / 3;
+            if (m < settings_.threshold_) {
+                c.setRed(0);
+                c.setGreen(0);
+                c.setBlue(0);
+            } else if (m > settings_.limit_) {
+                const auto dif = m - settings_.limit_;
+                c.setRed(c.red() - dif);
+                c.setGreen(c.green() - dif);
+                c.setBlue(c.blue() - dif);
+            }
+        }
+    }
+}
 
+void ColorCalculator::applyGamma(LedColors& led_colors) const {
     for (auto v : std::vector<std::vector<QColor>*>{ &led_colors.left_strip, &led_colors.top_strip, &led_colors.right_strip, &led_colors.bottom_strip }) {
         for (auto& c : *v) {
             c.setRed(c.red() + settings_.gamma_red_);

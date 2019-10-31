@@ -34,6 +34,9 @@ struct IniFile {
         static const QString GammaRed;
         static const QString GammaGreen;
         static const QString GammaBlue;
+        static const QString UseLimits;
+        static const QString Threshold;
+        static const QString Limit;
     };
 };
 
@@ -54,6 +57,9 @@ const QString IniFile::General::UseGammaCorrection = "UseGammaCorrection";
 const QString IniFile::General::GammaRed = "GammaRed";
 const QString IniFile::General::GammaGreen = "GammaGreen";
 const QString IniFile::General::GammaBlue = "GammaBlue";
+const QString IniFile::General::UseLimits = "UseLimits";
+const QString IniFile::General::Threshold = "Threshold";
+const QString IniFile::General::Limit = "Limit";
 
 Settings::Settings() {
     QSettings settings(settings_file_name, QSettings::IniFormat);
@@ -91,6 +97,10 @@ Settings::Settings() {
     gamma_red_ = settings.value(IniFile::General::GammaRed, 0).toInt();
     gamma_green_ = settings.value(IniFile::General::GammaGreen, 0).toInt();
     gamma_blue_ = settings.value(IniFile::General::GammaBlue, 0).toInt();
+
+    use_limits_ = settings.value(IniFile::General::UseLimits, false).toBool();
+    threshold_ = settings.value(IniFile::General::Threshold, 0).toInt();
+    limit_ = settings.value(IniFile::General::Limit, 0).toInt();
 
     settings.endGroup();
 }
@@ -136,6 +146,10 @@ void Settings::save() const {
     settings.setValue(IniFile::General::GammaRed, gamma_red_);
     settings.setValue(IniFile::General::GammaGreen, gamma_green_);
     settings.setValue(IniFile::General::GammaBlue, gamma_blue_);
+
+    settings.setValue(IniFile::General::UseLimits, use_limits_);
+    settings.setValue(IniFile::General::Threshold, threshold_);
+    settings.setValue(IniFile::General::Limit, limit_);
 
     settings.endGroup();
 }
