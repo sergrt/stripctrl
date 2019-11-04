@@ -45,22 +45,24 @@ void ColorPreviewWidget::paintEvent(QPaintEvent* event) {
     const HorSegmentSize& hor_segment_size = segments_size.first;
     const auto h = height();
     QBrush brush(Qt::SolidPattern);
-    for (size_t i = 0; i < colors_.top_strip.size(); ++i) {
+    const auto hor_size = colors_.top_strip.size();
+    for (size_t i = 0; i < hor_size; ++i) {
         const auto x = i * hor_segment_size.width();
 
         brush.setColor(colors_.top_strip[i]);
         painter.fillRect(x, 0, x + hor_segment_size.width(), hor_segment_size.height(), brush);
 
-        brush.setColor(colors_.bottom_strip[i]);
+        brush.setColor(colors_.bottom_strip[hor_size - i - 1]);
         painter.fillRect(x, h - hor_segment_size.height(), x + hor_segment_size.width(), h, brush);
     }
 
     const VertSegmentSize& vert_segment_size = segments_size.second;
     const auto w = width();
-    for (size_t i = 0; i < colors_.left_strip.size(); ++i) {
+    const auto vert_size = colors_.left_strip.size();
+    for (size_t i = 0; i < vert_size; ++i) {
         const auto y = hor_segment_size.height() + i * vert_segment_size.height();
 
-        brush.setColor(colors_.left_strip[i]);
+        brush.setColor(colors_.left_strip[vert_size - i - 1]);
         painter.fillRect(0, y, vert_segment_size.width(), y + vert_segment_size.height(), brush);
 
         brush.setColor(colors_.right_strip[i]);

@@ -6,7 +6,13 @@ DataSender::DataSender(const Settings& settings) {
     serial_port_.setPortName(settings.serial_port_name_);
     if (!serial_port_.setBaudRate(settings.baud_rate_))
         throw std::runtime_error("Unable to set baud rate");
-    if (!serial_port_.open(QIODevice::WriteOnly))
+    /*
+    serial_port_.setDataBits(QSerialPort::DataBits::Data8);
+    serial_port_.setParity(QSerialPort::Parity::NoParity);
+    serial_port_.setStopBits(QSerialPort::StopBits::OneStop);
+    */
+
+    if (!serial_port_.open(QIODevice::ReadWrite))
         throw std::runtime_error("Unable to open port");
 }
 
@@ -17,6 +23,13 @@ DataSender::~DataSender() {
 
 void DataSender::send(const LedColors& data) {
     if (!serial_port_.isOpen())
+        return;
+
+    QByteArray _ = serial_port_.readAll();
+    if (_.isEmpty())
+        serial_port_.waitForReadyRead(1000);
+
+    if (_.isEmpty())
         return;
 
     const unsigned short led_num = data.left_strip.size() * 2 + data.top_strip.size() * 2;
@@ -34,4 +47,5 @@ void DataSender::send(const LedColors& data) {
     }
 
     serial_port_.write(raw_data.data(), raw_data.size());
+    serial_port_.waitForBytesWritten(1000);
 }

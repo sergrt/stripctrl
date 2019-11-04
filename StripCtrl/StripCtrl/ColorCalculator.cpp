@@ -153,15 +153,13 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
         thread_func_param = settings_.monte_carlo_points_;
     }
 
-    
-
     const auto vertical_segment_height = screen_size.height() / settings_.leds_v_;
     std::vector<std::future<QColor>> results_left_strip(settings_.leds_v_);
     std::vector<std::future<QColor>> results_right_strip(settings_.leds_v_);
 
     for (size_t vert = 0; vert < settings_.leds_v_; ++vert) {
         const int y = vert * vertical_segment_height;
-        results_left_strip[vert] = thread_pool_.push(thread_func, std::cref(data),
+        results_left_strip[settings_.leds_v_ - vert - 1] = thread_pool_.push(thread_func, std::cref(data),
                                                      QRect(0, y, settings_.vertical_segment_width_, vertical_segment_height),
                                                      thread_func_param,
                                                      screen_size.width());
@@ -184,7 +182,7 @@ LedColors ColorCalculator::calc(const std::vector<unsigned char>& data, const QS
                                                    thread_func_param,
                                                    screen_size.width());
 
-        results_bottom_strip[hor] = thread_pool_.push(thread_func, std::cref(data),
+        results_bottom_strip[settings_.leds_h_ - hor - 1] = thread_pool_.push(thread_func, std::cref(data),
                                                       QRect(x, screen_size.height() - settings_.horizontal_segment_height_,
                                                             horizontal_segment_width, settings_.horizontal_segment_height_),
                                                       thread_func_param,

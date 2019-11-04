@@ -55,12 +55,10 @@ void captureFunc(LedColors& colors, const Settings& settings) {
     while(!stop_capture) {
         const auto now = std::chrono::system_clock::now();
         capture->capture();
-        // Calculate regions
         {
+            // Calculate regions
             std::lock_guard<std::mutex> lock(fps_mutex);
             colors = color_calculator.calc(capture->data(), capture->screenSize());
-
-            // apply gamma
 
             auto diff = std::chrono::system_clock::now() - now;
             if (cnt == max_cnt) {
@@ -76,7 +74,6 @@ void captureFunc(LedColors& colors, const Settings& settings) {
         }
 
         // Send colors to strip here
-        // -->
         data_sender.send(colors);
     }
     capture->cleanup();
