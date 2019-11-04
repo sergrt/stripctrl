@@ -37,6 +37,7 @@ struct IniFile {
         static const QString UseLimits;
         static const QString Threshold;
         static const QString Limit;
+        static const QString DimValue;
     };
 };
 
@@ -60,6 +61,7 @@ const QString IniFile::General::GammaBlue = "GammaBlue";
 const QString IniFile::General::UseLimits = "UseLimits";
 const QString IniFile::General::Threshold = "Threshold";
 const QString IniFile::General::Limit = "Limit";
+const QString IniFile::General::DimValue = "DimValue";
 
 Settings::Settings() {
     QSettings settings(settings_file_name, QSettings::IniFormat);
@@ -101,6 +103,8 @@ Settings::Settings() {
     use_limits_ = settings.value(IniFile::General::UseLimits, false).toBool();
     threshold_ = settings.value(IniFile::General::Threshold, 0).toInt();
     limit_ = settings.value(IniFile::General::Limit, 0).toInt();
+
+    dim_value_ = settings.value(IniFile::General::DimValue, 0).toInt();
 
     settings.endGroup();
 }
@@ -150,6 +154,8 @@ void Settings::save() const {
     settings.setValue(IniFile::General::UseLimits, use_limits_);
     settings.setValue(IniFile::General::Threshold, threshold_);
     settings.setValue(IniFile::General::Limit, limit_);
+
+    settings.setValue(IniFile::General::DimValue, dim_value_);
 
     settings.endGroup();
 }

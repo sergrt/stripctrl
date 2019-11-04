@@ -13,4 +13,5 @@ public:
     void send(const LedColors& data);
 private:
     QSerialPort serial_port_;
+    const Settings& settings_;
 };

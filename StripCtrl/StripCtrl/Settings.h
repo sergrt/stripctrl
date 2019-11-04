@@ -42,4 +42,6 @@ public:
     bool use_limits_ = false;
     int threshold_ = 0;
     int limit_ = 255;
+
+    int dim_value_ = 0;
 };

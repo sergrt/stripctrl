@@ -235,6 +235,8 @@ StripCtrl::StripCtrl(QWidget *parent)
     connect(ui.threshold, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
     connect(ui.limit, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
 
+    connect(ui.dim_value, qOverload<int>(&QSpinBox::valueChanged), this, &StripCtrl::uiToSettings);
+
     if (preview_active)
         ui_update_thread_.start();
 
@@ -294,6 +296,8 @@ void StripCtrl::settingsToUi() const {
     ui.use_limits->setChecked(settings_.use_limits_);
     ui.threshold->setValue(settings_.threshold_);
     ui.limit->setValue(settings_.limit_);
+
+    ui.dim_value->setValue(settings_.dim_value_);
 }
 
 void StripCtrl::uiToSettings() {
@@ -326,6 +330,8 @@ void StripCtrl::uiToSettings() {
     settings_.use_limits_ = ui.use_limits->isChecked();
     settings_.threshold_ = ui.threshold->value();
     settings_.limit_ = ui.limit->value();
+
+    settings_.dim_value_ = ui.dim_value->value();
 
     settings_.save();
 }

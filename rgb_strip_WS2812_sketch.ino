@@ -42,11 +42,14 @@ void loop() {
     last_update_time = millis();
     short leds_num = 0;
     Serial.readBytes((char*)(&leds_num), 2);
+    
+    int dim_value = 0;
+    Serial.readBytes((char*)(&dim_value), 1);
 
     for (int i = 0; i < leds_num; ++i) {    
       Serial.readBytes( (char*)(&leds[i]), 3);
     }
-    leds_ref.fadeLightBy(200);
+    leds_ref.fadeLightBy(dim_value);
   }
 
   // Turn off if there is no data for certain timeout
@@ -54,4 +57,4 @@ void loop() {
     leds_ref.fadeToBlackBy(255);
   }  
   FastLED.show();
-} 
+}
