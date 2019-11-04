@@ -5,7 +5,7 @@ Features:
 - Fast screen capture using D3D or GDI;
 - Rich LED and screen configuration - strip size, screen segments size etc;
 - Several color calculation algorithms, fast and not so fast :)
-- Color manipulation - r- g- anb b- adjustments;
+- Color manipulation - R- G- and B- adjustments;
 - Light threshold and limit controls;
 - Real-time brightness control.
 
