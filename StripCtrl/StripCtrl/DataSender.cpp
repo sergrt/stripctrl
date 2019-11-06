@@ -2,6 +2,10 @@
 #include "DataSender.h"
 #include "Settings.h"
 
+namespace {
+    const int port_ready_timeout = 500;
+}
+
 DataSender::DataSender(const Settings& settings)
     : settings_{ settings } {
     serial_port_.setPortName(settings_.serial_port_name_);
@@ -28,7 +32,7 @@ void DataSender::send(const LedColors& data) {
 
     QByteArray _ = serial_port_.readAll();
     if (_.isEmpty()) {
-        if (!serial_port_.waitForReadyRead(1000))
+        if (!serial_port_.waitForReadyRead(port_ready_timeout))
             return;
         _ = serial_port_.readAll();
     }
@@ -53,5 +57,4 @@ void DataSender::send(const LedColors& data) {
     }
 
     serial_port_.write(raw_data.data(), raw_data.size());
-    serial_port_.waitForBytesWritten();
 }

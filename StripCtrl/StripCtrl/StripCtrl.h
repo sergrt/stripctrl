@@ -32,6 +32,8 @@ private:
     void startPreviewThread();
     void stopPreviewThread();
 
+    void setUnsafeControlsEnabled(bool enabled) const;
+
     std::thread capture_thread_;
     UiUpdateThread ui_update_thread_;
 

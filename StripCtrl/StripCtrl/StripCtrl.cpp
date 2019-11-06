@@ -93,6 +93,7 @@ void UiUpdateThread::run() {
 }
 
 void StripCtrl::startCaptureThread() {
+    setUnsafeControlsEnabled(false);
     stop_capture = false;
     capture_thread_ = std::thread(captureFunc, std::ref(colors_), std::cref(settings_));
 }
@@ -101,6 +102,7 @@ void StripCtrl::stopCaptureThread() {
     stop_capture = true;
     if (capture_thread_.joinable())
         capture_thread_.join();
+    setUnsafeControlsEnabled(true);
 }
 
 void StripCtrl::restartCaptureThread() {
@@ -334,4 +336,13 @@ void StripCtrl::uiToSettings() {
     settings_.dim_value_ = ui.dim_value->value();
 
     settings_.save();
+}
+
+void StripCtrl::setUnsafeControlsEnabled(bool enabled) const {
+    const std::initializer_list<QWidget*> unsafe_controls = {
+        ui.leds_h,
+        ui.leds_v };
+
+    for(auto* const w : unsafe_controls)
+        w->setEnabled(enabled);
 }
